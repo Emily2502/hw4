@@ -19,8 +19,7 @@
 #include "Players/Wizard.h"
 #include "Players/Fighter.h"
 #include "utilities.h"
-#include <queue>
-#include <stack>
+#include <deque>
 #include <memory>
 #include <fstream>
 #include <map>
@@ -73,10 +72,13 @@ public:
     int getNumberOfRounds() const;
 
 private:
-    std::queue<std::unique_ptr<Card>> m_cardDeck;
-    std::queue<std::unique_ptr<Player>> m_winners;
-    std::stack<std::unique_ptr<Player>> m_losers;
-    std::queue<std::unique_ptr<Player>> m_stillInGame;
+    std::deque<std::unique_ptr<Card>> m_deck;
+    std::deque<std::unique_ptr<Player>> m_winners;
+    std::deque<std::unique_ptr<Player>> m_losers;
+    std::deque<std::unique_ptr<Player>> m_players;
+    int m_rounds;
+
+
 
 
 
@@ -100,11 +102,11 @@ std::unique_ptr<Player> createPlayerInstance(const std::string& name)
 
 std::unique_ptr<Card> createCard(const std::string& name);
 
-void readCards(const std::string& sourceFileName, std::queue<std::unique_ptr<Card>>& cardDeck);
+void readCards(const std::string& sourceFileName, std::deque<std::unique_ptr<Card>>& cardDeck);
 
 std::unique_ptr<Player> createPlayer(const std::string& name, const std::string& character);
 
-void getPlayers(std::queue<std::unique_ptr<Player>>& queue);
+void getPlayers(std::deque<std::unique_ptr<Player>>& queue);
 
 /**------------------------------------------------------------------------------*/
 

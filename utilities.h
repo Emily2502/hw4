@@ -242,7 +242,7 @@ void printLeaderBoardStartMessage();
  * @return
  *      void
  */
-//void printPlayerLeaderBoard(int ranking, const Player &player);
+void printPlayerLeaderBoard(int ranking, const Player &player);
 
 /*
  * Prints info indicating the end of the game:

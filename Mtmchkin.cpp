@@ -3,20 +3,81 @@
 //
 
 #include "Mtmchkin.h"
-using std::queue;
-using std::stack;
+using std::deque;
 using std::unique_ptr;
 
 Mtmchkin::Mtmchkin(const std::string fileName)
 {
-    readCards(fileName, m_cardDeck);
-    //getPlayers(m_stillInGame);
+    readCards(fileName, m_deck);
+    getPlayers(m_players);
+    m_rounds = 0;
 }
 
 void Mtmchkin::playRound()
 {
+    m_rounds++;
+    printRoundStartMessage(m_rounds);
 
+    for (int i = 0; i < m_players.size(); i++)
+    {
+        printTurnStartMessage(m_players.front()->getName());
+        m_deck.front()->applyEncounter(*m_players.front());
+
+        m_deck.push_back(std::move(m_deck.front()));
+        m_deck.pop_front();
+
+        if (m_players.front()->isKnockedOut())
+        {
+            m_losers.push_front(std::move(m_players.front()));
+        }
+        else if (m_players.front()->getLevel() == 10) // Todo: replace -> isAtMaxLevel()
+        {
+            m_winners.push_back(std::move(m_players.front()));
+        }
+        else
+        {
+            m_players.push_back(std::move(m_players.front()));
+        }
+        m_players.pop_front();
+    }
+
+    if (isGameOver())
+    {
+        printGameEndMessage();
+    }
 }
+
+bool Mtmchkin::isGameOver() const
+{
+    return m_players.empty();
+}
+
+int Mtmchkin::getNumberOfRounds() const
+{
+    return m_rounds;
+}
+
+void Mtmchkin::printLeaderBoard() const
+{
+    printLeaderBoardStartMessage();
+    int ranking = 1;
+    for (int i = 0; i < m_winners.size(); i++)
+    {
+        printPlayerLeaderBoard(ranking, *m_winners[i]);
+        ranking++;
+    }
+    for (int i = 0; i < m_players.size(); i++)
+    {
+        printPlayerLeaderBoard(ranking, *m_players[i]);
+        ranking++;
+    }
+    for (int i = 0; i < m_losers.size(); i++)
+    {
+        printPlayerLeaderBoard(ranking, *m_losers[i]);
+        ranking++;
+    }
+}
+
 
 unique_ptr<Card> createCard(const std::string& name)
 {
@@ -43,7 +104,7 @@ std::unique_ptr<Player> createPlayer(const std::string& name, const std::string&
     return playerConstructors[character](name);
 }
 
-void readCards(const std::string& sourceFileName, queue<unique_ptr<Card>>& cardDeck)
+void readCards(const std::string& sourceFileName, deque<unique_ptr<Card>>& cardDeck)
 {
     std::ifstream source(sourceFileName);
     if (!source)
@@ -56,11 +117,11 @@ void readCards(const std::string& sourceFileName, queue<unique_ptr<Card>>& cardD
     while (std::getline(source, name))
     {
         //check name + Exceptions
-        cardDeck.push(createCard(name));
+        cardDeck.push_back(createCard(name));
     }
 }
 
-void getPlayers(queue<unique_ptr<Player>>& players)
+void getPlayers(deque<unique_ptr<Player>>& players)
 {
     printStartGameMessage();
     printEnterTeamSizeMessage();
@@ -84,6 +145,6 @@ void getPlayers(queue<unique_ptr<Player>>& players)
         std::cin >> character;
         //check name of character
 
-        players.push(createPlayer(name, character));
+        players.push_back(createPlayer(name, character));
     }
 }

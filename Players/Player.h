@@ -6,7 +6,6 @@
 #define HW4_PLAYER_H
 
 #include "HealthPoints.h"
-#include "../utilities.h"
 #include <string>
 
 class Player {
@@ -183,6 +182,22 @@ private:
     int m_coins;  /** non-negative integer */
 };
 
+/**
+ * Prints the details of the player:
+ * Tip : Needed for the leaderBoard method (adjusted to print after the ranking section).
+
+ * @param os - The ostream.
+ * @param name - The name of the player.
+ * @param job - The job class of the player.
+ * @param level - The player's level.
+ * @param force - The player's force.
+ * @param hp - The player's HP points.
+ * @param coins - The player's amount of coins.
+ * @return
+ *      void
+ */
+void printPlayerDetails(std::ostream &os, const std::string &name,
+                        const std::string &job, int level, int force, int HP, int coins);
 
 
 #endif //HW4_PLAYER_H
