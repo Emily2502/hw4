@@ -1,0 +1,8 @@
+Goblin
+Vampire
+Dragon
+Merchant
+Treasure
+Pitfall
+Barfight
+Fairy
