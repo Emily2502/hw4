@@ -18,6 +18,7 @@
 #include "Players/Rogue.h"
 #include "Players/Wizard.h"
 #include "Players/Fighter.h"
+#include "Exception.h"
 #include "utilities.h"
 #include <deque>
 #include <memory>
@@ -71,19 +72,20 @@ public:
     */
     int getNumberOfRounds() const;
 
+    /**
+     * Here we are explicitly telling the compiler to use the default d'tor,
+     * and delete copy c'tor and assignment operator (the big 3)
+    */
+    Mtmchkin(const Mtmchkin&) = delete;
+    Mtmchkin& operator=(const Mtmchkin&) = delete;
+    ~Mtmchkin() = default;
+
 private:
     std::deque<std::unique_ptr<Card>> m_deck;
     std::deque<std::unique_ptr<Player>> m_winners;
     std::deque<std::unique_ptr<Player>> m_losers;
     std::deque<std::unique_ptr<Player>> m_players;
     int m_rounds;
-
-
-
-
-
-
-
 };
 
 /**------------------------ helper functions for c'tor --------------------------*/
@@ -100,13 +102,21 @@ std::unique_ptr<Player> createPlayerInstance(const std::string& name)
     return std::unique_ptr<Player>(new T(name));
 }
 
-std::unique_ptr<Card> createCard(const std::string& name);
+static std::unique_ptr<Card> createCard(const std::string& name);
 
-void readCards(const std::string& sourceFileName, std::deque<std::unique_ptr<Card>>& cardDeck);
+static void readCards(const std::string& sourceFileName, std::deque<std::unique_ptr<Card>>& cardDeck);
 
-std::unique_ptr<Player> createPlayer(const std::string& name, const std::string& character);
+static std::unique_ptr<Player> createPlayer(const std::string& name, const std::string& character);
 
-void getPlayers(std::deque<std::unique_ptr<Player>>& queue);
+static void getPlayers(std::deque<std::unique_ptr<Player>>& queue);
+
+static bool cardNameIsValid(const std::string& card);
+
+static int receiveSize();
+
+static void receivePlayerName(std::string& playerName, std::string& playerCharacter);
+
+static bool characterNameIsValid(const std::string& character);
 
 /**------------------------------------------------------------------------------*/
 

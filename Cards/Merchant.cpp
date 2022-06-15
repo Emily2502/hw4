@@ -16,15 +16,17 @@ void Merchant::applyEncounter(Player &player) const
 {
     printMerchantInitialMessageForInteractiveEncounter
             (std::cout, player.getName(), player.getCoins());
-    int input = -1;
-    std::cin >> input;
 
-    while (input != 0 && input != 1 && input != 2)
+    std::string buffer;
+    std::cin >> buffer;
+
+    while (buffer.size() != 1 || buffer[0] < '0' || buffer[0] > '2')
     {
        printInvalidInput();
-       std::cin >> input;
+       std::cin >> buffer;
     }
 
+    int input = std::stoi(buffer);
     int cost = 0;
 
     if (input == 1)
@@ -43,7 +45,7 @@ void Merchant::applyEncounter(Player &player) const
     {
         if (player.pay(m_forceBoostPrice))
         {
-            player.heal(m_forceBoost);
+            player.buff(m_forceBoost);
             cost = m_forceBoostPrice;
         }
         else

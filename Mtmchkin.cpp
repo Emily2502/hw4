@@ -17,8 +17,9 @@ void Mtmchkin::playRound()
 {
     m_rounds++;
     printRoundStartMessage(m_rounds);
+    int size = m_players.size();
 
-    for (int i = 0; i < m_players.size(); i++)
+    for (int i = 0; i < size; i++)
     {
         printTurnStartMessage(m_players.front()->getName());
         m_deck.front()->applyEncounter(*m_players.front());
@@ -109,42 +110,110 @@ void readCards(const std::string& sourceFileName, deque<unique_ptr<Card>>& cardD
     std::ifstream source(sourceFileName);
     if (!source)
     {
-        //Exceptions
-        return;
+        throw DeckFileNotFound();
     }
 
-    std::string name;
-    while (std::getline(source, name))
+    int line = 1;
+    std::string card;
+    while (std::getline(source, card))
     {
-        //check name + Exceptions
-        cardDeck.push_back(createCard(name));
+        if (!cardNameIsValid(card))
+        {
+            throw DeckFileFormatError(line);
+        }
+        line++;
+        cardDeck.push_back(createCard(card));
+    }
+    if (cardDeck.size() < 5)
+    {
+        throw DeckFileInvalidSize();
     }
 }
 
 void getPlayers(deque<unique_ptr<Player>>& players)
 {
     printStartGameMessage();
-    printEnterTeamSizeMessage();
-    int size = 0;
-    std::cin >> size;
+    int size = receiveSize();
 
-    while (size > 6 || size < 2)
-    {
-        printInvalidTeamSize();
-        printEnterTeamSizeMessage();
-        std::cin >> size;
-    }
-
+    std::string name;
+    std::string character;
     for (int i = 0; i < size; i++)
     {
-        printInsertPlayerMessage();
-        std::string name;
-        std::cin >> name;
-
-        std::string character;
-        std::cin >> character;
-        //check name of character
-
+        receivePlayerName(name,character);
         players.push_back(createPlayer(name, character));
     }
 }
+
+static bool cardNameIsValid(const std::string& card)
+{
+    return card == "Goblin" || card == "Vampire" || card == "Dragon"
+     || card == "Merchant" || card == "Treasure" || card == "Pitfall"
+     || card == "Barfight" || card == "Fairy";
+}
+
+static int receiveSize()
+{
+    printEnterTeamSizeMessage();
+    std::string buffer;
+    std::getline(std::cin,buffer);
+
+    while (buffer.size() != 1 || buffer[0] < '2' || buffer[0] > '6')
+    {
+        printInvalidTeamSize();
+        printEnterTeamSizeMessage();
+        std::cin >> buffer;
+    }
+    return std::stoi(buffer);
+}
+
+static void receivePlayerName(std::string& playerName, std::string& playerCharacter)
+{
+    printInsertPlayerMessage();
+    std::string name;
+    std::cin >> name;
+
+    std::string character;
+    std::cin >> character;
+
+    std::string buffer;
+    std::getline(std::cin, buffer);
+    while (true)
+    {
+        if (!buffer.empty())
+        {
+            printInvalidInput();
+        }
+        else if (name.size() > 15)
+        {
+            printInvalidName();
+        }
+        else if (!characterNameIsValid(character))
+        {
+            printInvalidClass();
+        }
+        else
+        {
+            break;
+        }
+
+        std::cin >> name;
+        std::cin >> character;
+        std::getline(std::cin, buffer);
+    }
+    playerName = name;
+    playerCharacter = character;
+}
+
+static bool characterNameIsValid(const std::string& character)
+{
+    return character == "Fighter" || character == "Wizard" || character == "Rogue";
+}
+
+
+
+
+
+
+
+
+
