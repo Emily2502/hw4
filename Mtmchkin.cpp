@@ -6,8 +6,25 @@
 using std::deque;
 using std::unique_ptr;
 
+static std::unique_ptr<Card> createCard(const std::string& name);
+
+static void readCards(const std::string& sourceFileName, std::deque<std::unique_ptr<Card>>& cardDeck);
+
+static std::unique_ptr<Player> createPlayer(const std::string& name, const std::string& character);
+
+static void getPlayers(std::deque<std::unique_ptr<Player>>& queue);
+
+static bool cardNameIsValid(const std::string& card);
+
+static int receiveSize();
+
+static void receivePlayerName(std::string& playerName, std::string& playerCharacter);
+
+static bool characterNameIsValid(const std::string& character);
+
 Mtmchkin::Mtmchkin(const std::string fileName)
 {
+    printStartGameMessage();
     readCards(fileName, m_deck);
     getPlayers(m_players);
     m_rounds = 0;
@@ -62,17 +79,17 @@ void Mtmchkin::printLeaderBoard() const
 {
     printLeaderBoardStartMessage();
     int ranking = 1;
-    for (int i = 0; i < m_winners.size(); i++)
+    for (int i = 0; i < int(m_winners.size()); i++)
     {
         printPlayerLeaderBoard(ranking, *m_winners[i]);
         ranking++;
     }
-    for (int i = 0; i < m_players.size(); i++)
+    for (int i = 0; i < int(m_players.size()); i++)
     {
         printPlayerLeaderBoard(ranking, *m_players[i]);
         ranking++;
     }
-    for (int i = 0; i < m_losers.size(); i++)
+    for (int i = 0; i < int(m_losers.size()); i++)
     {
         printPlayerLeaderBoard(ranking, *m_losers[i]);
         ranking++;
@@ -132,7 +149,6 @@ void readCards(const std::string& sourceFileName, deque<unique_ptr<Card>>& cardD
 
 void getPlayers(deque<unique_ptr<Player>>& players)
 {
-    printStartGameMessage();
     int size = receiveSize();
 
     std::string name;
@@ -144,14 +160,14 @@ void getPlayers(deque<unique_ptr<Player>>& players)
     }
 }
 
-static bool cardNameIsValid(const std::string& card)
+bool cardNameIsValid(const std::string& card)
 {
     return card == "Goblin" || card == "Vampire" || card == "Dragon"
      || card == "Merchant" || card == "Treasure" || card == "Pitfall"
      || card == "Barfight" || card == "Fairy";
 }
 
-static int receiveSize()
+int receiveSize()
 {
     printEnterTeamSizeMessage();
     std::string buffer;
@@ -166,7 +182,7 @@ static int receiveSize()
     return std::stoi(buffer);
 }
 
-static void receivePlayerName(std::string& playerName, std::string& playerCharacter)
+void receivePlayerName(std::string& playerName, std::string& playerCharacter)
 {
     printInsertPlayerMessage();
     std::string name;
@@ -204,7 +220,7 @@ static void receivePlayerName(std::string& playerName, std::string& playerCharac
     playerCharacter = character;
 }
 
-static bool characterNameIsValid(const std::string& character)
+bool characterNameIsValid(const std::string& character)
 {
     return character == "Fighter" || character == "Wizard" || character == "Rogue";
 }

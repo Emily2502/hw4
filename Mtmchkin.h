@@ -102,21 +102,7 @@ std::unique_ptr<Player> createPlayerInstance(const std::string& name)
     return std::unique_ptr<Player>(new T(name));
 }
 
-static std::unique_ptr<Card> createCard(const std::string& name);
 
-static void readCards(const std::string& sourceFileName, std::deque<std::unique_ptr<Card>>& cardDeck);
-
-static std::unique_ptr<Player> createPlayer(const std::string& name, const std::string& character);
-
-static void getPlayers(std::deque<std::unique_ptr<Player>>& queue);
-
-static bool cardNameIsValid(const std::string& card);
-
-static int receiveSize();
-
-static void receivePlayerName(std::string& playerName, std::string& playerCharacter);
-
-static bool characterNameIsValid(const std::string& character);
 
 /**------------------------------------------------------------------------------*/
 
