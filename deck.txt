@@ -1,10 +1,15 @@
 Merchant
-Merchant
 Dragon
 Pitfall
 Barfight
 Fairy
+Gang
 Goblin
 Vampire
 Dragon
 Vampire
+EndGang
+Gang
+Goblin
+Vampire
+EndGang

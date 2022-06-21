@@ -36,7 +36,7 @@ public:
     void printCard(std::ostream &os) const override;
 
     /**
-     * Handling the player's applyEncounter with a battle card
+     * Handling the player's encounter with a battle card
      * Class BattleCard is an interface!
      *
      * @param player - The player.
@@ -44,6 +44,16 @@ public:
      *      void
     */
     void applyEncounter(Player& player) const override = 0;
+
+    /**
+     * Handling the player's encounter with a battle card in a gang
+     * Class BattleCard is an interface!
+     *
+     * @param player - The player.
+     * @return
+     *      void
+    */
+    virtual void applyEncounterAsGang(Player& player, bool& playerLost) const = 0;
 
 protected:
     int m_force;

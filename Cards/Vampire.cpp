@@ -27,3 +27,18 @@ void Vampire::applyEncounter(Player &player) const
         printLossBattle(player.getName(),"Vampire");
     }
 }
+
+void Vampire::applyEncounterAsGang(Player &player, bool& playerLost) const
+{
+    if (player.getAttackStrength() >= m_force && !playerLost)
+    {
+        player.addCoins(m_loot);
+    }
+    else
+    {
+        playerLost = true;
+        player.weaken(m_forceLost);
+        player.damage(m_damage);
+        printLossBattle(player.getName(),"Vampire");
+    }
+}

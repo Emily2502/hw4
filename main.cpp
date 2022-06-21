@@ -1,7 +1,12 @@
 #include <iostream>
 #include "Mtmchkin.h"
 #include "test.h"
-
+using std::deque;
+using std::unique_ptr;
+using std::string;
+using std::cin;
+using std::cout;
+using std::endl;
 
 void run_game();
 
@@ -10,20 +15,30 @@ int main()
 
     int choice;
     std::string buffer;
-    std::cout << "Enter 1 for tests" << std::endl;
-    std::getline(std::cin, buffer);
+    cout << "Enter 1 for tests, 2 for regular or 3 for anything else" << endl;
+    std::getline(cin, buffer);
     choice = stoi(buffer);
-
 
     if (choice == 1)
     {
         tests();
+        return 0;
     }
-    else
+    if (choice == 2)
     {
         run_game();
+        return 0;
     }
+
+    deque<unique_ptr<Card>> deck;
+    receiveCards("../deck.txt", deck);
+    for (const unique_ptr<Card>& card : deck)
+    {
+        cout << *card << endl;
+    }
+
     return 0;
+
 }
 
 void run_game()

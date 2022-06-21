@@ -24,3 +24,17 @@ void Goblin::applyEncounter(Player &player) const
         printLossBattle(player.getName(),"Goblin");
     }
 }
+
+void Goblin::applyEncounterAsGang(Player &player, bool& playerLost) const
+{
+    if (player.getAttackStrength() >= m_force && !playerLost)
+    {
+        player.addCoins(m_loot);
+    }
+    else
+    {
+        playerLost = true;
+        player.damage(m_damage);
+        printLossBattle(player.getName(),"Goblin");
+    }
+}

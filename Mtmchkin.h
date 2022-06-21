@@ -101,6 +101,12 @@ std::unique_ptr<Card> createCardInstance()
 }
 
 template<class T>
+std::unique_ptr<BattleCard> createBattleCardInstance()
+{
+    return std::unique_ptr<BattleCard>(new T);
+}
+
+template<class T>
 std::unique_ptr<Player> createPlayerInstance(const std::string& name)
 {
     return std::unique_ptr<Player>(new T(name));
@@ -116,6 +122,16 @@ std::unique_ptr<Player> createPlayerInstance(const std::string& name)
     *      unique pointer to the new card.
     */
 std::unique_ptr<Card> createCard(const std::string& name);
+
+
+/**
+    * Creates a new battle card
+    *
+    * @param name - name of the card to create.
+    * @return
+    *      unique pointer to the new card.
+    */
+std::unique_ptr<BattleCard> createBattleCard(const std::string& name);
 
 
 /**
@@ -148,6 +164,15 @@ bool cardNameIsValid(const std::string& card);
 bool characterNameIsValid(const std::string& character);
 
 /**
+    * Checks if character's name is valid
+    *
+    * @param name - name to check.
+    * @return
+    *      true if valid and false otherwise.
+    */
+bool monsterNameIsValid(const std::string& character);
+
+/**
     * Checks if player's name is valid
     *
     * @param name - name to check.
@@ -166,6 +191,15 @@ bool playerNameIsValid(const std::string& name);
     *      void.
     */
 void receiveCards(const std::string& sourceFileName, std::deque<std::unique_ptr<Card>>& cardDeck);
+
+/**
+    * Reads monsters for gang from file into a queue
+    *
+    * @param gang - queue to store cards.
+    * @return
+    *      void.
+    */
+void receiveGang(std::istream& source, std::deque<std::string>& gang, int& line);
 
 /**
     * Receives cards from the user into a given queue

@@ -94,6 +94,16 @@ unique_ptr<Card> createCard(const std::string& name)
     return cardConstructors[name]();
 }
 
+unique_ptr<BattleCard> createBattleCard(const std::string& name)
+{
+    std::map<std::string, unique_ptr<BattleCard> (*)()> cardConstructors;
+    cardConstructors["Goblin"] = createBattleCardInstance<Goblin>;
+    cardConstructors["Vampire"] = createBattleCardInstance<Vampire>;
+    cardConstructors["Dragon"] = createBattleCardInstance<Dragon>;
+
+    return cardConstructors[name]();
+}
+
 std::unique_ptr<Player> createPlayer(const std::string& name, const std::string& character)
 {
     std::map<std::string, unique_ptr<Player> (*)(const std::string&)> playerConstructors;
@@ -121,8 +131,17 @@ void receiveCards(const std::string& sourceFileName, deque<unique_ptr<Card>>& ca
         {
             throw DeckFileFormatError(line);
         }
+        if (card == "Gang")
+        {
+            deque<std::string> gang;
+            receiveGang(source, gang, line);
+            cardDeck.push_back(unique_ptr<Card>(new Gang(gang)));
+        }
+        else
+        {
+            cardDeck.push_back(createCard(card));
+        }
         line++;
-        cardDeck.push_back(createCard(card));
     }
     if (cardDeck.size() < 5)
     {
@@ -225,4 +244,26 @@ bool characterNameIsValid(const std::string& character)
     return character == "Fighter" || character == "Wizard" || character == "Rogue";
 }
 
+bool monsterNameIsValid(const std::string& card)
+{
+    return card == "Goblin" || card == "Vampire" || card == "Dragon"|| card == "EndGang";
+}
+
+void receiveGang(std::istream& source, std::deque<std::string>& gang, int& line)
+{
+    std::string card;
+    while (true)
+    {
+        if (!std::getline(source, card) || !monsterNameIsValid(card))
+        {
+            throw DeckFileFormatError(line);
+        }
+        line++;
+        if (card == "EndGang")
+        {
+            break;
+        }
+        gang.push_back(card);
+    }
+}
 

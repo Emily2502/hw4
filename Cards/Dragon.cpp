@@ -30,3 +30,17 @@ void Dragon::printCard(std::ostream &os) const
     Card::printCard(os);
     printMonsterDetails(os, m_force, m_damage, m_loot, true);
 }
+
+void Dragon::applyEncounterAsGang(Player &player, bool& playerLost) const
+{
+    if (player.getAttackStrength() >= m_force && !playerLost)
+    {
+        player.addCoins(m_loot);
+    }
+    else
+    {
+        playerLost = true;
+        player.damage(player.getHP());
+        printLossBattle(player.getName(),"Dragon");
+    }
+}
