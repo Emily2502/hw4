@@ -1,11 +1,14 @@
 //
 // Created by 97250 on 6/13/2022.
 //
-
 #include "Dragon.h"
+const int DRAGON_FORCE = 25;
+const int DRAGON_DAMAGE = -1;
+const int DRAGON_LOOT = 1000;
+
 
 Dragon::Dragon() :
-        BattleCard("Dragon", 25, -1, 1000) {}
+        BattleCard("Dragon", DRAGON_FORCE, DRAGON_DAMAGE, DRAGON_LOOT) {}
 
 void Dragon::applyEncounter(Player &player) const
 {

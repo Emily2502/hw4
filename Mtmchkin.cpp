@@ -3,30 +3,16 @@
 //
 
 #include "Mtmchkin.h"
+const int MAX_LEVEL = 10;
 using std::deque;
 using std::unique_ptr;
 
-static std::unique_ptr<Card> createCard(const std::string& name);
-
-static void readCards(const std::string& sourceFileName, std::deque<std::unique_ptr<Card>>& cardDeck);
-
-static std::unique_ptr<Player> createPlayer(const std::string& name, const std::string& character);
-
-static void getPlayers(std::deque<std::unique_ptr<Player>>& queue);
-
-static bool cardNameIsValid(const std::string& card);
-
-static int receiveSize();
-
-static void receivePlayerName(std::string& playerName, std::string& playerCharacter);
-
-static bool characterNameIsValid(const std::string& character);
 
 Mtmchkin::Mtmchkin(const std::string fileName)
 {
     printStartGameMessage();
-    readCards(fileName, m_deck);
-    getPlayers(m_players);
+    receiveCards(fileName, m_deck);
+    receivePlayers(m_players);
     m_rounds = 0;
 }
 
@@ -39,8 +25,8 @@ void Mtmchkin::playRound()
     for (int i = 0; i < size; i++)
     {
         printTurnStartMessage(m_players.front()->getName());
-        m_deck.front()->applyEncounter(*m_players.front());
 
+        m_deck.front()->applyEncounter(*m_players.front());
         m_deck.push_back(std::move(m_deck.front()));
         m_deck.pop_front();
 
@@ -48,7 +34,7 @@ void Mtmchkin::playRound()
         {
             m_losers.push_front(std::move(m_players.front()));
         }
-        else if (m_players.front()->getLevel() == 10) // Todo: replace -> isAtMaxLevel()
+        else if (m_players.front()->getLevel() == MAX_LEVEL)
         {
             m_winners.push_back(std::move(m_players.front()));
         }
@@ -81,21 +67,17 @@ void Mtmchkin::printLeaderBoard() const
     int ranking = 1;
     for (int i = 0; i < int(m_winners.size()); i++)
     {
-        printPlayerLeaderBoard(ranking, *m_winners[i]);
-        ranking++;
+        printPlayerLeaderBoard(ranking++, *m_winners[i]);
     }
     for (int i = 0; i < int(m_players.size()); i++)
     {
-        printPlayerLeaderBoard(ranking, *m_players[i]);
-        ranking++;
+        printPlayerLeaderBoard(ranking++, *m_players[i]);
     }
     for (int i = 0; i < int(m_losers.size()); i++)
     {
-        printPlayerLeaderBoard(ranking, *m_losers[i]);
-        ranking++;
+        printPlayerLeaderBoard(ranking++, *m_losers[i]);
     }
 }
-
 
 unique_ptr<Card> createCard(const std::string& name)
 {
@@ -122,7 +104,8 @@ std::unique_ptr<Player> createPlayer(const std::string& name, const std::string&
     return playerConstructors[character](name);
 }
 
-void readCards(const std::string& sourceFileName, deque<unique_ptr<Card>>& cardDeck)
+
+void receiveCards(const std::string& sourceFileName, deque<unique_ptr<Card>>& cardDeck)
 {
     std::ifstream source(sourceFileName);
     if (!source)
@@ -147,27 +130,21 @@ void readCards(const std::string& sourceFileName, deque<unique_ptr<Card>>& cardD
     }
 }
 
-void getPlayers(deque<unique_ptr<Player>>& players)
+void receivePlayers(deque<unique_ptr<Player>>& queue)
 {
-    int size = receiveSize();
+    int size = receiveTeamSize();
 
     std::string name;
     std::string character;
     for (int i = 0; i < size; i++)
     {
         receivePlayerName(name,character);
-        players.push_back(createPlayer(name, character));
+        queue.push_back(createPlayer(name, character));
     }
 }
 
-bool cardNameIsValid(const std::string& card)
-{
-    return card == "Goblin" || card == "Vampire" || card == "Dragon"
-     || card == "Merchant" || card == "Treasure" || card == "Pitfall"
-     || card == "Barfight" || card == "Fairy";
-}
 
-int receiveSize()
+int receiveTeamSize()
 {
     printEnterTeamSizeMessage();
     std::string buffer;
@@ -177,7 +154,7 @@ int receiveSize()
     {
         printInvalidTeamSize();
         printEnterTeamSizeMessage();
-        std::cin >> buffer;
+        std::getline(std::cin,buffer);
     }
     return std::stoi(buffer);
 }
@@ -199,7 +176,7 @@ void receivePlayerName(std::string& playerName, std::string& playerCharacter)
         {
             printInvalidInput();
         }
-        else if (name.size() > 15)
+        else if (!playerNameIsValid(name))
         {
             printInvalidName();
         }
@@ -220,16 +197,32 @@ void receivePlayerName(std::string& playerName, std::string& playerCharacter)
     playerCharacter = character;
 }
 
+bool playerNameIsValid(const std::string& name)
+{
+    if (name.size() > 15)
+    {
+        return false;
+    }
+    for (char letter : name)
+    {
+        if ((letter < 'a' || letter > 'z') && (letter < 'A' || letter > 'Z'))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool cardNameIsValid(const std::string& card)
+{
+    return card == "Goblin" || card == "Vampire" || card == "Dragon"
+           || card == "Merchant" || card == "Treasure" || card == "Pitfall"
+           || card == "Barfight" || card == "Fairy" || card == "Gang";
+}
+
 bool characterNameIsValid(const std::string& character)
 {
     return character == "Fighter" || character == "Wizard" || character == "Rogue";
 }
-
-
-
-
-
-
-
 
 

@@ -3,12 +3,12 @@
 //
 
 #include "Pitfall.h"
-// Todo: #defines
+const int PITFALL_HP_LOST = 10;
 
 
 Pitfall::Pitfall() :
         Card("Pitfall"),
-        m_hpLost(10) {}
+        m_hpLost(PITFALL_HP_LOST) {}
 
 void Pitfall::applyEncounter(Player &player) const
 {

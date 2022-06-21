@@ -3,14 +3,20 @@
 //
 
 #include "Merchant.h"
-// Todo: #defines
+const int MERCHANT_HEALTH_POTION = 1;
+const int MERCHANT_HEALTH_POTION_PRICE = 5;
+const int MERCHANT_FORCE_BOOST = 1;
+const int MERCHANT_FORCE_BOOST_PRICE = 10;
+const int MERCHANT_HEALTH_POTION_INPUT = 1;
+const int MERCHANT_FORCE_BOOST_INPUT = 2;
+
 
 Merchant::Merchant() :
     Card("Merchant"),
-    m_healthPotion(1),
-    m_healthPotionPrice(5),
-    m_forceBoost(1),
-    m_forceBoostPrice(10) {}
+    m_healthPotion(MERCHANT_HEALTH_POTION),
+    m_healthPotionPrice(MERCHANT_HEALTH_POTION_PRICE),
+    m_forceBoost(MERCHANT_FORCE_BOOST),
+    m_forceBoostPrice(MERCHANT_FORCE_BOOST_PRICE) {}
 
 void Merchant::applyEncounter(Player &player) const
 {
@@ -29,7 +35,7 @@ void Merchant::applyEncounter(Player &player) const
     int input = std::stoi(buffer);
     int cost = 0;
 
-    if (input == 1)
+    if (input == MERCHANT_HEALTH_POTION_INPUT)
     {
         if (player.pay(m_healthPotionPrice))
         {
@@ -41,7 +47,7 @@ void Merchant::applyEncounter(Player &player) const
             printMerchantInsufficientCoins(std::cout);
         }
     }
-    else if (input == 2)
+    else if (input == MERCHANT_FORCE_BOOST_INPUT)
     {
         if (player.pay(m_forceBoostPrice))
         {
