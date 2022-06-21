@@ -9,7 +9,11 @@ int main()
 {
 
     int choice;
-    std::cin >> choice;
+    std::string buffer;
+    std::cout << "Enter 1 for tests" << std::endl;
+    std::getline(std::cin, buffer);
+    choice = stoi(buffer);
+
 
     if (choice == 1)
     {
