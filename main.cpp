@@ -30,12 +30,13 @@ int main()
         return 0;
     }
 
-    deque<unique_ptr<Card>> deck;
-    receiveCards("../deck.txt", deck);
-    for (const unique_ptr<Card>& card : deck)
+    string buff;
+
+    if (std::getline(cin, buff) || buff == "")
     {
-        cout << *card << endl;
+        cout << "True" << endl;
     }
+
 
     return 0;
 
