@@ -20,15 +20,11 @@ Gang::Gang(deque<string> &gang):
 void Gang::applyEncounter(Player &player) const
 {
     bool playerLost = false;
-    for (const std::unique_ptr<BattleCard>& card : m_gang)
+    for (int i = 0; i < m_gang.size(); i++)
     {
-        card->applyEncounterAsGang(player,playerLost);
+        m_gang[i]->applyEncounterAsGang(player,playerLost);
     }
-    if (playerLost)
-    {
-        printLossBattle(player.getName(),"Dragon");
-    }
-    else
+    if (!playerLost)
     {
         player.levelUp();
         printWinBattle(player.getName(),"Gang");
