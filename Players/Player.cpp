@@ -77,11 +77,7 @@ void Player::weaken(int forcePointsToSubtract)
 
 bool Player::isKnockedOut() const
 {
-    if (int(m_hp) == 0)
-    {
-        return true;
-    }
-    return false;
+    return int(m_hp) == 0;
 }
 
 bool Player::pay(const int coinsToPay)

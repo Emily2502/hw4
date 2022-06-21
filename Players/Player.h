@@ -95,6 +95,16 @@ public:
 
 
     /**
+     * Decreases force of a player
+     *
+     * @param forcePointsToSubtract - Number of points to decrease player's force by.
+     * @return
+     *      void
+    */
+    void weaken(int forcePointsToSubtract);
+
+
+    /**
      * Increases HP of a player
      *
      * @param hpPointsToAdd - Number of points to increase player's HP by.
@@ -113,15 +123,6 @@ public:
     */
     void damage(int hpPointsToSubtract);
 
-
-    /**
-     * Decreases force of a player
-     *
-     * @param forcePointsToSubtract - Number of points to decrease player's force by.
-     * @return
-     *      void
-    */
-    void weaken(int forcePointsToSubtract);
 
     /**
      * Checks if HP of a player is zero
@@ -175,17 +176,16 @@ public:
 
 private:
 
-    std::string m_name;  /** English letters. no spaces */
-    HealthPoints m_hp;  /** [0,maxHp] */
-    int m_level;  /** [1,10] */
-    int m_force;  /** natural number */
-    int m_coins;  /** non-negative integer */
+    std::string m_name;
+    HealthPoints m_hp;
+    int m_level;
+    int m_force;
+    int m_coins;
 };
 
 /**
- * Prints the details of the player:
- * Tip : Needed for the leaderBoard method (adjusted to print after the ranking section).
-
+ * Prints the details of the player
+ *
  * @param os - The ostream.
  * @param name - The name of the player.
  * @param job - The job class of the player.
