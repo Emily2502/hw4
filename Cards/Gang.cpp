@@ -20,7 +20,7 @@ Gang::Gang(deque<string> &gang):
 void Gang::applyEncounter(Player &player) const
 {
     bool playerLost = false;
-    for (int i = 0; i < m_gang.size(); i++)
+    for (int i = 0; i < int(m_gang.size()); i++)
     {
         m_gang[i]->applyEncounterAsGang(player,playerLost);
     }
