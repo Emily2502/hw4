@@ -39,7 +39,7 @@ public:
 
 
     /**
-     * Handling the player's applyEncounter with a card
+     * Handling the player's encounter with a card
      * Class Card is an interface!
      *
      * @param player - The player.

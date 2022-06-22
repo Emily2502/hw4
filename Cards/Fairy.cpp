@@ -3,12 +3,12 @@
 //
 
 #include "Fairy.h"
-// Todo: #defines
+const int FAIRY_HP_WIN = 10;
 
 
 Fairy::Fairy() :
         Card("Fairy"),
-        m_hpWin(10) {}
+        m_hpWin(FAIRY_HP_WIN) {}
 
 void Fairy::applyEncounter(Player &player) const
 {

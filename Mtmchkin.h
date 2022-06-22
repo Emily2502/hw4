@@ -14,13 +14,17 @@
 #include "Cards/Pitfall.h"
 #include "Cards/Barfight.h"
 #include "Cards/Fairy.h"
+#include "Cards/Gang.h"
+
 #include "Players/Player.h"
 #include "Players/Rogue.h"
 #include "Players/Wizard.h"
 #include "Players/Fighter.h"
+
+#include "Exception.h"
 #include "utilities.h"
-#include <queue>
-#include <stack>
+
+#include <deque>
 #include <memory>
 #include <fstream>
 #include <map>
@@ -72,16 +76,20 @@ public:
     */
     int getNumberOfRounds() const;
 
+    /**
+     * Here we are explicitly telling the compiler to use the default d'tor,
+     * and delete copy c'tor and assignment operator (the big 3)
+    */
+    Mtmchkin(const Mtmchkin&) = delete;
+    Mtmchkin& operator=(const Mtmchkin&) = delete;
+    ~Mtmchkin() = default;
+
 private:
-    std::queue<std::unique_ptr<Card>> m_cardDeck;
-    std::queue<std::unique_ptr<Player>> m_winners;
-    std::stack<std::unique_ptr<Player>> m_losers;
-    std::queue<std::unique_ptr<Player>> m_stillInGame;
-
-
-
-
-
+    std::deque<std::unique_ptr<Card>> m_deck;
+    std::deque<std::unique_ptr<Player>> m_winners;
+    std::deque<std::unique_ptr<Player>> m_losers;
+    std::deque<std::unique_ptr<Player>> m_players;
+    int m_rounds;
 };
 
 /**------------------------ helper functions for c'tor --------------------------*/
@@ -93,20 +101,133 @@ std::unique_ptr<Card> createCardInstance()
 }
 
 template<class T>
+std::unique_ptr<BattleCard> createBattleCardInstance()
+{
+    return std::unique_ptr<BattleCard>(new T);
+}
+
+template<class T>
 std::unique_ptr<Player> createPlayerInstance(const std::string& name)
 {
     return std::unique_ptr<Player>(new T(name));
 }
 
+
+
+/**
+    * Creates a new card
+    *
+    * @param name - name of the card to create.
+    * @return
+    *      unique pointer to the new card.
+    */
 std::unique_ptr<Card> createCard(const std::string& name);
 
-void readCards(const std::string& sourceFileName, std::queue<std::unique_ptr<Card>>& cardDeck);
 
+/**
+    * Creates a new battle card
+    *
+    * @param name - name of the card to create.
+    * @return
+    *      unique pointer to the new card.
+    */
+std::unique_ptr<BattleCard> createBattleCard(const std::string& name);
+
+
+/**
+    * Creates a new player
+    *
+    * @param name - name of the player to create.
+    * @return
+    *      unique pointer to the new player.
+    */
 std::unique_ptr<Player> createPlayer(const std::string& name, const std::string& character);
 
-void getPlayers(std::queue<std::unique_ptr<Player>>& queue);
+
+/**
+    * Checks if card's name is valid
+    *
+    * @param name - name to check.
+    * @return
+    *      true if valid and false otherwise.
+    */
+bool cardNameIsValid(const std::string& card);
+
+
+/**
+    * Checks if character's name is valid
+    *
+    * @param name - name to check.
+    * @return
+    *      true if valid and false otherwise.
+    */
+bool characterNameIsValid(const std::string& character);
+
+/**
+    * Checks if character's name is valid
+    *
+    * @param name - name to check.
+    * @return
+    *      true if valid and false otherwise.
+    */
+bool monsterNameIsValid(const std::string& character);
+
+/**
+    * Checks if player's name is valid
+    *
+    * @param name - name to check.
+    * @return
+    *      true if valid and false otherwise.
+    */
+bool playerNameIsValid(const std::string& name);
+
+
+/**
+    * Reads cards from file into a given deck
+    *
+    * @param sourceFileName - name of the file from which to read.
+    * @param cardDeck - card deck to read into.
+    * @return
+    *      void.
+    */
+void receiveCards(const std::string& sourceFileName, std::deque<std::unique_ptr<Card>>& cardDeck);
+
+/**
+    * Reads monsters for gang from file into a queue
+    *
+    * @param gang - queue to store cards.
+    * @return
+    *      void.
+    */
+void receiveGang(std::istream& source, std::deque<std::string>& gang, int& line);
+
+/**
+    * Receives cards from the user into a given queue
+    *
+    * @param queue - queue to store players.
+    * @return
+    *      void.
+    */
+void receivePlayers(std::deque<std::unique_ptr<Player>>& queue);
+
+/**
+    * Receives number of players from the user
+    *
+    * @return
+    *      number of players.
+    */
+int receiveTeamSize();
+
+/**
+    * Receives name of one player from the user
+    *
+    * @param playerName - reference to store player's name in.
+    * @param playerCharacter - reference to store player's character in.
+    * @return
+    *      void.
+    */
+void receivePlayerName(std::string& playerName, std::string& playerCharacter);
+
 
 /**------------------------------------------------------------------------------*/
-
-
 #endif //HW4_MTMCHKIN_H

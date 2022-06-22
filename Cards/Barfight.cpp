@@ -3,12 +3,11 @@
 //
 
 #include "Barfight.h"
-// Todo: #defines
-
+const int BARFIGHT_HP_LOST = 10;
 
 Barfight::Barfight() :
         Card("Barfight"),
-        m_hpLost(10) {}
+        m_hpLost(BARFIGHT_HP_LOST) {}
 
 void Barfight::applyEncounter(Player &player) const
 {

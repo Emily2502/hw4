@@ -3,10 +3,14 @@
 //
 
 #include "Vampire.h"
+const int VAMPIRE_FORCE = 10;
+const int VAMPIRE_DAMAGE = 10;
+const int VAMPIRE_LOOT = 2;
+const int VAMPIRE_FORCE_LOST = 1;
 
 Vampire::Vampire() :
-        BattleCard("Vampire", 10, 10, 2),
-        m_forceLost(1) {}
+        BattleCard("Vampire", VAMPIRE_FORCE, VAMPIRE_DAMAGE, VAMPIRE_LOOT),
+        m_forceLost(VAMPIRE_FORCE_LOST) {}
 
 void Vampire::applyEncounter(Player &player) const
 {
@@ -18,6 +22,21 @@ void Vampire::applyEncounter(Player &player) const
     }
     else
     {
+        player.weaken(m_forceLost);
+        player.damage(m_damage);
+        printLossBattle(player.getName(),"Vampire");
+    }
+}
+
+void Vampire::applyEncounterAsGang(Player &player, bool& playerLost) const
+{
+    if (player.getAttackStrength() >= m_force && !playerLost)
+    {
+        player.addCoins(m_loot);
+    }
+    else
+    {
+        playerLost = true;
         player.weaken(m_forceLost);
         player.damage(m_damage);
         printLossBattle(player.getName(),"Vampire");

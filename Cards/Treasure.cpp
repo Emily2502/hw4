@@ -3,11 +3,12 @@
 //
 
 #include "Treasure.h"
-// Todo: #defines
+const int TREASURE_COINS = 10;
+
 
 Treasure::Treasure() :
     Card("Treasure"),
-    m_coins(10) {}
+    m_coins(TREASURE_COINS) {}
 
 void Treasure::applyEncounter(Player &player) const
 {

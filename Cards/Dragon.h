@@ -38,13 +38,23 @@ public:
 
 
     /**
-     * Handling the player's applyEncounter with a Dragon card
+     * Handling the player's encounter with a Dragon card
      *
      * @param player - The player.
      * @return
      *      void
     */
     void applyEncounter(Player& player) const override;
+
+    /**
+     * Handling the player's encounter with a Dragon card in a gang
+     *
+     * @param player - The player.
+     * @param playerLost - true if said player had previously lost to card in gang.
+     * @return
+     *      void
+    */
+    void applyEncounterAsGang(Player& player, bool& playerLost) const override;
 
 };
 

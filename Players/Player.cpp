@@ -4,6 +4,8 @@ const int INITIAL_HP = 100;
 const int INITIAL_LEVEL = 1;
 const int INITIAL_COINS = 10;
 const int INITIAL_FORCE = 5;
+const int MINIMUM_FORCE = 0;
+const int MINIMUM_HP = 0;
 const int MAX_LEVEL = 10;
 
 Player::Player(const std::string &name) :
@@ -68,20 +70,16 @@ void Player::weaken(int forcePointsToSubtract)
 {
     m_force -= forcePointsToSubtract;
 
-    if (m_force < 0)
+    if (m_force < MINIMUM_FORCE)
     {
-        m_force = 0;
+        m_force = MINIMUM_FORCE;
     }
 }
 
 
 bool Player::isKnockedOut() const
 {
-    if (int(m_hp) == 0)
-    {
-        return true;
-    }
-    return false;
+    return int(m_hp) == MINIMUM_HP;
 }
 
 bool Player::pay(const int coinsToPay)

@@ -37,6 +37,16 @@ public:
     */
     void applyEncounter(Player& player) const override;
 
+    /**
+     * Handling the player's encounter with a Vampire card in a gang
+     *
+     * @param player - The player.
+     * @param playerLost - true if said player had previously lost to card in gang.
+     * @return
+     *      void
+    */
+    void applyEncounterAsGang(Player& player, bool& playerLost) const override;
+
 private:
     int m_forceLost;
 };
