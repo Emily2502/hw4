@@ -14,8 +14,24 @@ class Gang : public Card
 {
 
 public:
+
+    /**
+     * C'tor of Gang class
+     *
+     * @param gang - list of monsters to create a gang.
+     * @return
+     *      A new instance of Gang.
+    */
     explicit Gang(std::deque<std::string>& gang);
 
+
+    /**
+     * Handling the player's encounter with a gang card
+     *
+     * @param player - The player.
+     * @return
+     *      void
+    */
     void applyEncounter(Player& player) const override;
 
 
