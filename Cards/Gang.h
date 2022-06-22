@@ -24,6 +24,14 @@ public:
     */
     explicit Gang(std::deque<std::string>& gang);
 
+    /**
+     * Here we are explicitly telling the compiler to use the default d'tor,
+     * copy c'tor and assignment operator (the big 3)
+    */
+    Gang(const Gang&) = default;
+    Gang& operator=(const Gang& other) = default;
+    ~Gang() override = default;
+
 
     /**
      * Handling the player's encounter with a gang card
