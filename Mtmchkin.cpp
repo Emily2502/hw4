@@ -181,21 +181,23 @@ int receiveTeamSize()
 void receivePlayerName(std::string& playerName, std::string& playerCharacter)
 {
     printInsertPlayerMessage();
-    std::string name;
-    std::cin >> name;
 
-    std::string character;
-    std::cin >> character;
 
     std::string buffer;
-    std::getline(std::cin, buffer);
-    while (true)
+    std::string name;
+    std::string character;
+
+    while (std::getline(std::cin, buffer) || true)
     {
-        if (!buffer.empty())
+        for (int i = 0; buffer[i] != ' '; i++)
         {
-            printInvalidInput();
+            name += buffer[i];
         }
-        else if (!playerNameIsValid(name))
+        for (int i = int(name.size()) + 1; i < buffer.size(); i++)
+        {
+            character += buffer[i];
+        }
+        if (!playerNameIsValid(name))
         {
             printInvalidName();
         }
@@ -207,10 +209,8 @@ void receivePlayerName(std::string& playerName, std::string& playerCharacter)
         {
             break;
         }
-
-        std::cin >> name;
-        std::cin >> character;
-        std::getline(std::cin, buffer);
+        name = "";
+        character = "";
     }
     playerName = name;
     playerCharacter = character;

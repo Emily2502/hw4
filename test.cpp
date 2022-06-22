@@ -383,5 +383,6 @@ int tests()
     run_test(gangTest1,"Gang Test 1");
     run_test(gangTest2,"Gang Test 2");
     run_test(gangTest3,"Gang Test 3");
+    run_test(merchantInputTest,"Merchant Input Test");
     return 0;
 }

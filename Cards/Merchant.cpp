@@ -24,10 +24,11 @@ void Merchant::applyEncounter(Player &player) const
             (std::cout, player.getName(), player.getCoins());
 
     std::string buffer;
-
-    while (!std::getline(std::cin, buffer) || buffer.size() != 1 || buffer[0] < '0' || buffer[0] > '2')
+    std::getline(std::cin, buffer);
+    while (buffer != "0" && buffer != "1" && buffer != "2")
     {
-       printInvalidInput();
+        printInvalidInput();
+        std::getline(std::cin, buffer);
     }
 
     int input = std::stoi(buffer);

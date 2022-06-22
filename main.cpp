@@ -30,12 +30,6 @@ int main()
         return 0;
     }
 
-    string buff;
-
-    if (std::getline(cin, buff) || buff == "")
-    {
-        cout << "True" << endl;
-    }
 
 
     return 0;
